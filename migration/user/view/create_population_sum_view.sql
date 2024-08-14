@@ -1,8 +1,8 @@
-CREATE VIEW ${schema:raw}.population_sum AS
-SELECT 
-    SUM((doc_record->>'Population')::int) as total_population
-FROM 
-    ${schema:raw}.api_data, 
-    jsonb_array_elements(doc_record) as doc_record
-WHERE 
-    (doc_record->>'ID Year')::int IN (2018, 2019, 2020);
+DROP VIEW if exists ${schema:raw}.vw_total_population CASCADE;
+
+CREATE OR REPLACE VIEW ${schema:raw}.vw_total_population AS
+SELECT SUM((data_element->>'Population')::int) AS total_population
+FROM ${schema:raw}.api_data,
+LATERAL jsonb_array_elements(doc_record->'data') AS data_element
+WHERE (data_element->>'Year')::text IN ('2018', '2019', '2020')
+;

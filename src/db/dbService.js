@@ -1,3 +1,5 @@
+const { DATABASE_SCHEMA } = require('../../config');
+
 async function insertData(db, data) {
     return await db[DATABASE_SCHEMA].api_data.insert({
         doc_record: data,

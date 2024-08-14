@@ -15,13 +15,11 @@ const { insertData, calculateTotalPopulation } = require('./db/dbService');
     const data = await fetchData();
     await insertData(db, data);
 
-    // In-memory calculation
     const totalPopulationMemory = data
         .filter(item => [2020, 2019, 2018].includes(item['ID Year']))
         .reduce((sum, item) => sum + item.Population, 0);
     console.log('Total population (in-memory):', totalPopulationMemory);
 
-    // SQL Query calculation
     const totalPopulationSQL = await calculateTotalPopulation(db);
     console.log('Total population (SQL Query):', totalPopulationSQL[0].total_population);
 })();
