@@ -1,10 +1,12 @@
 const { DATABASE_SCHEMA } = require('../../config');
 
-async function insertData(db, data) {
-    return await db[DATABASE_SCHEMA].api_data.insert({
-        doc_record: data,
-    });
-}
+const insertData = async (db, data) => {
+    return await db.query(
+        `INSERT INTO "${DATABASE_SCHEMA}".api_data (doc_record) VALUES ($1) RETURNING id`,
+        [data]
+    );
+};
+
 
 async function calculateTotalPopulation(db) {
     return await db.query(`
